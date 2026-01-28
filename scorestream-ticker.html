@@ -34,7 +34,6 @@
     font-weight: bold;
     font-size: 18px;
     white-space: nowrap;
-    z-index: 2;
   }
 
   #scroll-area {
@@ -49,19 +48,18 @@
     animation: scroll-left 40s linear infinite;
   }
 
-  /* ESPN-style flash */
-  .flash {
-    animation: flashGlow 1s ease-in-out;
-  }
-
   @keyframes scroll-left {
     0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
   }
 
+  .flash {
+    animation: flashGlow 1s ease-in-out;
+  }
+
   @keyframes flashGlow {
-    0%   { background: rgba(255, 215, 0, 0.9); }
-    50%  { background: rgba(255, 215, 0, 0.4); }
+    0%   { background: rgba(255,215,0,0.8); }
+    50%  { background: rgba(255,215,0,0.4); }
     100% { background: transparent; }
   }
 </style>
@@ -81,19 +79,24 @@
   </div>
 </div>
 
+<!-- IMPORTANT: Load script AFTER content -->
 <script src="https://scorestream.com/apiJsCdn/widgets/embed.js"></script>
 
 <script>
-  // ESPN-style flash every refresh cycle
-  setInterval(() => {
-    const ticker = document.getElementById('ticker');
-    ticker.classList.remove('flash');
+  // Force ScoreStream to initialize after page load
+  window.onload = function () {
+    if (window.ScoreStream) {
+      ScoreStream.init();
+    }
 
-    // Force reflow
-    void ticker.offsetWidth;
-
-    ticker.classList.add('flash');
-  }, 15000); // every 15 seconds (adjustable)
+    // ESPN-style flash every 15 seconds
+    setInterval(() => {
+      const t = document.getElementById("ticker");
+      t.classList.remove("flash");
+      void t.offsetWidth;
+      t.classList.add("flash");
+    }, 15000);
+  };
 </script>
 
 </body>
