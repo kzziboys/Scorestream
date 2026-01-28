@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Basketball Score Ticker</title>
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  #ticker-bar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    background: linear-gradient(to right, #000000, #111111);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-top: 2px solid #c00;
+  }
+
+  #label {
+    background: #c00;
+    color: white;
+    padding: 0 16px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    font-size: 18px;
+    white-space: nowrap;
+    z-index: 2;
+  }
+
+  #scroll-area {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .scorestream-widget-container {
+    position: absolute;
+    white-space: nowrap;
+    animation: scroll-left 40s linear infinite;
+  }
+
+  /* ESPN-style flash */
+  .flash {
+    animation: flashGlow 1s ease-in-out;
+  }
+
+  @keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+  }
+
+  @keyframes flashGlow {
+    0%   { background: rgba(255, 215, 0, 0.9); }
+    50%  { background: rgba(255, 215, 0, 0.4); }
+    100% { background: transparent; }
+  }
+</style>
+</head>
+
+<body>
+
+<div id="ticker-bar">
+  <div id="label">HS BASKETBALL SCORES</div>
+
+  <div id="scroll-area">
+    <div id="ticker"
+         class="scorestream-widget-container"
+         data-ss_widget_type="horzScoreboard"
+         data-user-widget-id="59957">
+    </div>
+  </div>
+</div>
+
+<script src="https://scorestream.com/apiJsCdn/widgets/embed.js"></script>
+
+<script>
+  // ESPN-style flash every refresh cycle
+  setInterval(() => {
+    const ticker = document.getElementById('ticker');
+    ticker.classList.remove('flash');
+
+    // Force reflow
+    void ticker.offsetWidth;
+
+    ticker.classList.add('flash');
+  }, 15000); // every 15 seconds (adjustable)
+</script>
+
+</body>
+</html>
